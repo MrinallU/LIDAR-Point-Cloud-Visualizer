@@ -10,13 +10,17 @@ if(TARGET OusterSDK::ouster_pcap)
 
   add_executable(representations_example representations_example.cpp helpers.cpp)
   target_link_libraries(representations_example PRIVATE OusterSDK::ouster_client OusterSDK::ouster_pcap)
+    
+  add_executable(PcapViz PcapViz.cpp helpers.cpp)
+  target_link_libraries(PcapViz PRIVATE OusterSDK::ouster_client OusterSDK::ouster_pcap OusterSDK::ouster_viz)
 else()
   message(STATUS "No ouster_pcap library available; skipping examples")
 endif()
 
 if(TARGET OusterSDK::ouster_viz)
-  add_executable(viz_example viz_example.cpp)
-  target_link_libraries(viz_example PRIVATE OusterSDK::ouster_client OusterSDK::ouster_viz)
+  add_executable(viz_example viz_example.cpp helpers.cpp)
+  target_link_libraries(viz_example PRIVATE OusterSDK::ouster_client OusterSDK::ouster_pcap OusterSDK::ouster_viz) 
 else()
   message(STATUS "No ouster_viz library available; skipping examples")
 endif()
+

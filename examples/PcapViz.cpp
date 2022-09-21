@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2022, Ouster, Inc.
- * All rights reserved.
- *
- * Minimal static point viz library example.
- */
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -55,8 +49,7 @@ int main(int argc, char* argv[]) {
                   << std::endl;
         return argc == 1 ? EXIT_SUCCESS : EXIT_FAILURE;
     }
-    
-    std::cerr << "TEST" << std::endl; 
+
     // std::random boilerplate
     std::random_device rd;
     std::default_random_engine re(rd());
@@ -84,19 +77,15 @@ int main(int argc, char* argv[]) {
     auto range = scan.field(sensor::ChanField::RANGE);
     auto rawPoints = cartesian(range, lut);
     const size_t cloud_size = rawPoints.size();
-    std::cerr << "CLOUD SIZE  = "  <<  cloud_size << std::endl;
 
-    std::vector<float> points(3*196608);
-    // static_cast<int>(cloud_size);
-    for (int i = 1; i <= 196608; i++) {
-        long long ind = (i-1)*3; 
-        //std::cerr << "INDEX  = "  <<  ind << std::endl;
-        points[ind] = rawPoints(i,0); 
-        points[ind+1] = rawPoints(i,1) ; 
-        points[ind+2] = rawPoints(i,2) ; 
+    std::vector<float> points(3 * cloud_size);
+    for (int i = 1; i <= static_cast<int>(cloud_size); i++) {
+        int ind = (i-1)*3; 
+        rawPoints(i,0) = points[ind]; 
+        rawPoints(i,1) = points[ind+1]; 
+        rawPoints(i,2) = points[ind+2]; 
     }
 
-    std::cerr << "REGISTERED POINTS" << std::endl;
     // initialize visualizer and add keyboard/mouse callbacks
     ouster::viz::PointViz viz("Viz example");
     ouster::viz::add_default_controls(viz);
